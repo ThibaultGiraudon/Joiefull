@@ -24,33 +24,7 @@ struct ClothView: View {
                 ProgressView()
                     .accessibilityLabel("Chargement de l'image")
             }
-            HStack {
-                Text(cloth.name)
-                    .lineLimit(1)
-                Spacer()
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.orange)
-                Text("4.4") // TODO add rate in model
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel("noté \(4.4) étoiles")
-            HStack {
-                if cloth.originalPrice != cloth.price {
-                    Text("\(cloth.price, format: .currency(code: "EUR"))")
-                    Spacer()
-                    Text("\(cloth.originalPrice, format: .currency(code: "EUR"))")
-                        .strikethrough()
-                } else {
-                    Text("\(cloth.price, format: .currency(code: "EUR"))")                    
-                }
-            }
-            .accessibilityLabel { _ in
-                if cloth.originalPrice != cloth.price {
-                    Text("\(cloth.name), en promotion, \(cloth.price.formatted(.currency(code: "EUR"))) au lieu de \(cloth.originalPrice.formatted(.currency(code: "EUR")))")
-                } else {
-                    Text("\(cloth.name), \(cloth.price.formatted(.currency(code: "EUR")))")
-                }
-            }
+            ClothInfoView(cloth: cloth)
         }
         .frame(width: size.width)
     }
@@ -58,5 +32,5 @@ struct ClothView: View {
 
 #Preview {
     ClothView(cloth: DefaultData().cloth, size: CGSize(width: 200, height: 200))
-        .frame(width: 200, height: 200)
+        .frame(width: 200)
 }
