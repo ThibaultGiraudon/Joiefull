@@ -10,7 +10,7 @@ import SwiftUI
 struct ClothInfoView: View {
     var cloth: Cloth
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text(cloth.name)
                     .lineLimit(1)
