@@ -19,8 +19,10 @@ struct ClothView: View {
                     .frame(width: size.width, height: size.height)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .accessibilityLabel(cloth.picture.description)
             } placeholder: {
                 ProgressView()
+                    .accessibilityLabel("Chargement de l'image")
             }
             HStack {
                 Text(cloth.name)
@@ -30,6 +32,8 @@ struct ClothView: View {
                     .foregroundStyle(.orange)
                 Text("4.4") // TODO add rate in model
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("noté \(4.4) étoiles")
             HStack {
                 if cloth.originalPrice != cloth.price {
                     Text("\(cloth.price, format: .currency(code: "EUR"))")
@@ -38,6 +42,13 @@ struct ClothView: View {
                         .strikethrough()
                 } else {
                     Text("\(cloth.price, format: .currency(code: "EUR"))")                    
+                }
+            }
+            .accessibilityLabel { _ in
+                if cloth.originalPrice != cloth.price {
+                    Text("\(cloth.name), en promotion, \(cloth.price.formatted(.currency(code: "EUR"))) au lieu de \(cloth.originalPrice.formatted(.currency(code: "EUR")))")
+                } else {
+                    Text("\(cloth.name), \(cloth.price.formatted(.currency(code: "EUR")))")
                 }
             }
         }

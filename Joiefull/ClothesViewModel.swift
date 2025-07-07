@@ -19,6 +19,7 @@ class ClothesViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func fetchClothes() async {
         do {
             errorMessage = ""
