@@ -10,13 +10,15 @@ import SwiftUI
 struct ContentView: View {
     @State private var clothes: [Cloth] = []
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ScrollView(showsIndicators: false) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(clothes.filter({ $0.categoryItem == .accessories })) { cloth in
+                        ClothView(cloth: cloth)
+                    }
+                }
+            }
         }
-        .padding()
         .onAppear {
             clothes = Bundle.main.decode(file: "clothes.json")
             print(clothes)
@@ -24,10 +26,7 @@ struct ContentView: View {
     }
 }
 
-#Preview("Ipad") {
+#Preview() {
     ContentView()
 }
 
-#Preview("Iphone") {
-    ContentView()
-}
