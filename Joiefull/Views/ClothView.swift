@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ClothView: View {
     var cloth: Cloth
+    var size: CGSize
     var body: some View {
         VStack(alignment: .leading) {
             AsyncImage(url: cloth.picture.url) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
+                    .frame(width: size.width, height: size.height)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 20))
             } placeholder: {
@@ -23,6 +24,7 @@ struct ClothView: View {
             }
             HStack {
                 Text(cloth.name)
+                    .lineLimit(1)
                 Spacer()
                 Image(systemName: "star.fill")
                     .foregroundStyle(.orange)
@@ -39,11 +41,11 @@ struct ClothView: View {
                 }
             }
         }
-        .frame(width: 200)
+        .frame(width: size.width)
     }
 }
 
 #Preview {
-    ClothView(cloth: DefaultData().cloth)
+    ClothView(cloth: DefaultData().cloth, size: CGSize(width: 200, height: 200))
         .frame(width: 200, height: 200)
 }
