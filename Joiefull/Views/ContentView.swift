@@ -8,20 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var clothes: [Cloth] = []
+    @StateObject var viewModel = ClothesViewModel()
     var body: some View {
         ScrollView(showsIndicators: false) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(clothes.filter({ $0.categoryItem == .accessories })) { cloth in
-                        ClothView(cloth: cloth)
-                    }
-                }
+            CategoryView(title: "Hauts", clothes: viewModel.clothes, filter: .top)
+            CategoryView(title: "Bas", clothes: viewModel.clothes, filter: .bottoms)
+            CategoryView(title: "Sacs", clothes: viewModel.clothes, filter: .accessories)
+            CategoryView(title: "Chaussure", clothes: viewModel.clothes, filter: .shoes)
+        }
+        .refreshable {
+            Task {
+                await viewModel.fetchClothes()
             }
         }
         .onAppear {
-            clothes = Bundle.main.decode(file: "clothes.json")
-            print(clothes)
+            Task {
+                await viewModel.fetchClothes()
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if viewModel.showError {
+                Group {
+                    Color.red
+                    Text(viewModel.errorMessage)
+                }
+                .frame(height: 40)
+            }
         }
     }
 }

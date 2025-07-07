@@ -39,11 +39,11 @@ struct ClothView: View {
                 }
             }
         }
+        .frame(width: 200)
     }
 }
 
 #Preview {
-    let clothes: [Cloth] = Bundle.main.decode(file: "clothes.json")
-    ClothView(cloth: clothes.first!)
+    ClothView(cloth: DefaultData().cloth)
         .frame(width: 200, height: 200)
 }
