@@ -13,10 +13,10 @@ struct ClosetView: View {
     var body: some View {
         HStack {
             ScrollView(showsIndicators: false) {
-                CategoryView(title: "Hauts", clothes: viewModel.clothes, filter: .top)
-                CategoryView(title: "Bas", clothes: viewModel.clothes, filter: .bottoms)
-                CategoryView(title: "Sacs", clothes: viewModel.clothes, filter: .accessories)
-                CategoryView(title: "Chaussure", clothes: viewModel.clothes, filter: .shoes)
+                CategoryView(title: "Hauts", filter: .top)
+                CategoryView(title: "Bas", filter: .bottoms)
+                CategoryView(title: "Sacs", filter: .accessories)
+                CategoryView(title: "Chaussure", filter: .shoes)
             }
             .refreshable {
                 Task {

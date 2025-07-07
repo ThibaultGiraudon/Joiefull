@@ -25,7 +25,6 @@ struct ClothDetailsView: View {
                 AsyncImage(url: cloth.picture.url) { image in
                     image
                         .resizable()
-//                        .scaledToFit()
                         .aspectRatio(contentMode: .fill)
                         .frame(height: height)
                         .clipped()

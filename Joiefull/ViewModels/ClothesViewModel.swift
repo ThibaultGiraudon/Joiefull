@@ -12,13 +12,6 @@ class ClothesViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
     @Published var selectedCloth: Cloth?
-    static var shared = ClothesViewModel()
-    
-    init() {
-        Task {
-            await self.fetchClothes()
-        }
-    }
     
     @MainActor
     func fetchClothes() async {

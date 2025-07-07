@@ -29,6 +29,7 @@ struct Cloth: Identifiable, Codable, Hashable {
     var likes: Int
     var price: Double
     var originalPrice: Double
+    var isLiked: Bool = false
     
     struct Picture: Codable, Hashable {
         var url: URL

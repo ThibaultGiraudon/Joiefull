@@ -8,18 +8,39 @@
 import SwiftUI
 
 struct ClothView: View {
-    var cloth: Cloth
+    @Binding var cloth: Cloth
     var size: CGSize
     var body: some View {
         VStack(alignment: .leading) {
             AsyncImage(url: cloth.picture.url) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: size.width, height: size.height)
-                    .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .accessibilityLabel(cloth.picture.description)
+                ZStack(alignment: .bottomTrailing) {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: size.width, height: size.height)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .accessibilityLabel(cloth.picture.description)
+                    
+                    HStack {
+                        Image(systemName: cloth.isLiked ? "heart.fill" : "heart")
+                        Text("\(cloth.likes)")
+                    }
+                    .padding(5)
+                    .background {
+                        Capsule()
+                            .fill(.white)
+                    }
+                    .padding(10)
+                    .onTapGesture {
+                        cloth.isLiked.toggle()
+                        if cloth.isLiked == true {
+                            cloth.likes += 1
+                        } else {
+                            cloth.likes -= 1
+                        }
+                    }
+                }
             } placeholder: {
                 ProgressView()
                     .accessibilityLabel("Chargement de l'image")
@@ -31,6 +52,7 @@ struct ClothView: View {
 }
 
 #Preview {
-    ClothView(cloth: DefaultData().cloth, size: CGSize(width: 200, height: 200))
+    @Previewable @State var cloth = DefaultData().cloth
+    ClothView(cloth: $cloth, size: CGSize(width: 200, height: 200))
         .frame(width: 200)
 }
