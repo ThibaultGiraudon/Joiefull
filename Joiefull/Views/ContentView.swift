@@ -8,37 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var viewModel = ClothesViewModel()
+    @EnvironmentObject var viewModel: ClothesViewModel
+    @EnvironmentObject var coordinator: AppCoordinator
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            CategoryView(title: "Hauts", clothes: viewModel.clothes, filter: .top)
-            CategoryView(title: "Bas", clothes: viewModel.clothes, filter: .bottoms)
-            CategoryView(title: "Sacs", clothes: viewModel.clothes, filter: .accessories)
-            CategoryView(title: "Chaussure", clothes: viewModel.clothes, filter: .shoes)
-        }
-        .refreshable {
-            Task {
-                await viewModel.fetchClothes()
-            }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetchClothes()
-            }
-        }
-        .overlay(alignment: .bottom) {
-            if viewModel.showError {
-                Group {
-                    Color.red
-                    Text(viewModel.errorMessage)
+        NavigationStack(path: $coordinator.path) {
+            ClosetView()
+            .overlay(alignment: .bottom) {
+                if viewModel.showError {
+                    Group {
+                        Color.red
+                        Text(viewModel.errorMessage)
+                    }
+                    .frame(height: 40)
                 }
-                .frame(height: 40)
+            }
+            .navigationDestination(for: AppRoute.self) { route in
+                switch route {
+                    case .detailView(let cloth):
+                        ClothDetailsView(cloth: cloth)
+                    default:
+                        EmptyView()
+                }
             }
         }
     }
 }
 
 #Preview() {
+    @Previewable @StateObject var viewModel = ClothesViewModel()
+    @Previewable @StateObject var coordinator = AppCoordinator()
+    
     ContentView()
+        .environmentObject(coordinator)
+        .environmentObject(viewModel)
 }
 

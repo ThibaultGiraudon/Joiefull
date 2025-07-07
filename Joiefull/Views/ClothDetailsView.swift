@@ -9,13 +9,26 @@ import SwiftUI
 
 struct ClothDetailsView: View {
     var cloth: Cloth
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    var height: CGFloat {
+        if horizontalSizeClass == .compact {
+            return 431
+        }
+        return 405
+    }
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 AsyncImage(url: cloth.picture.url) { image in
                     image
                         .resizable()
-                        .scaledToFit()
+//                        .scaledToFit()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: height)
+                        .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .accessibilityLabel(cloth.picture.description)
                 } placeholder: {

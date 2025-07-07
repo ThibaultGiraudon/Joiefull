@@ -11,6 +11,7 @@ class ClothesViewModel: ObservableObject {
     @Published var clothes: [Cloth] = .init()
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
+    @Published var selectedCloth: Cloth?
     static var shared = ClothesViewModel()
     
     init() {

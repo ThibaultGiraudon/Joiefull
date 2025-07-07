@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct JoiefullApp: App {
+    @StateObject var coordinator = AppCoordinator()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(coordinator)
         }
     }
 }

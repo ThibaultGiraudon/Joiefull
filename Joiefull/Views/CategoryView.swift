@@ -13,12 +13,14 @@ struct CategoryView: View {
     var filter: Cloth.Category
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @EnvironmentObject var coordinator: AppCoordinator
+    @EnvironmentObject var viewModel: ClothesViewModel
     
     var size: CGSize {
         if horizontalSizeClass == .compact {
             return CGSize(width: 200, height: 200)
         }
-        return CGSize(width: 221, height: 312)
+        return CGSize(width: 221, height: 254)
     }
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,6 +30,13 @@ struct CategoryView: View {
                 HStack {
                     ForEach(clothes.filter({ $0.categoryItem == filter })) { cloth in
                         ClothView(cloth: cloth, size: size)
+                            .onTapGesture {
+                                if horizontalSizeClass == .compact {
+                                    coordinator.goToDetail(cloth: cloth)
+                                } else {
+                                    viewModel.selectedCloth = cloth
+                                }
+                            }
                     }
                 }
             }
@@ -37,5 +46,10 @@ struct CategoryView: View {
 }
 
 #Preview {
-    CategoryView(title: "Hauts", clothes: DefaultData().clothes, filter: .top) 
+    @Previewable @StateObject var viewModel = ClothesViewModel()
+    @Previewable @StateObject var coordinator = AppCoordinator()
+    
+    CategoryView(title: "Hauts", clothes: DefaultData().clothes, filter: .top)
+        .environmentObject(coordinator)
+        .environmentObject(viewModel)
 }

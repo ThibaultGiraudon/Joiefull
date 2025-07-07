@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Cloth: Identifiable, Codable {
+struct Cloth: Identifiable, Codable, Hashable {
     var id: Int
     var picture: Picture
     var name: String
@@ -30,7 +30,7 @@ struct Cloth: Identifiable, Codable {
     var price: Double
     var originalPrice: Double
     
-    struct Picture: Codable {
+    struct Picture: Codable, Hashable {
         var url: URL
         var description: String
     }
