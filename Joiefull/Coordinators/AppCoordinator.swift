@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import SwiftUI
 
 class AppCoordinator: ObservableObject {
     @Published var path: [AppRoute] = []
     
-    func goToDetail(cloth: Cloth) {
-        path.append(.detailView(cloth: cloth))
+    
+    func goToDetail() {
+        path.append(.detailView)
     }
     
     func resetNavigation() {
@@ -21,5 +23,5 @@ class AppCoordinator: ObservableObject {
 
 enum AppRoute: Hashable {
     case home
-    case detailView(cloth: Cloth)
+    case detailView
 }

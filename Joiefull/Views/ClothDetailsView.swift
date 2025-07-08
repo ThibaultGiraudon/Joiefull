@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ClothDetailsView: View {
-    var cloth: Cloth
+    @Binding var cloth: Cloth
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -23,13 +23,34 @@ struct ClothDetailsView: View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 AsyncImage(url: cloth.picture.url) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: height)
-                        .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .accessibilityLabel(cloth.picture.description)
+                    ZStack(alignment: .bottomTrailing) {
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: height)
+                            .clipped()
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .accessibilityLabel(cloth.picture.description)
+                        
+                        HStack {
+                            Image(systemName: cloth.isLiked ? "heart.fill" : "heart")
+                            Text("\(cloth.likes)")
+                        }
+                        .padding(5)
+                        .background {
+                            Capsule()
+                                .fill(.white)
+                        }
+                        .padding(10)
+                        .onTapGesture {
+                            cloth.isLiked.toggle()
+                            if cloth.isLiked == true {
+                                cloth.likes += 1
+                            } else {
+                                cloth.likes -= 1
+                            }
+                        }
+                    }
                 } placeholder: {
                     ProgressView()
                         .accessibilityLabel("Chargement de l'image")
@@ -45,5 +66,7 @@ struct ClothDetailsView: View {
 }
 
 #Preview {
-    ClothDetailsView(cloth: DefaultData().cloth)
+    @Previewable @State var cloth = DefaultData().cloth
+    ClothDetailsView(cloth: $cloth)
+        .frame(width: 400)
 }
