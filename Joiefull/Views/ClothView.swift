@@ -32,7 +32,7 @@ struct ClothView: View {
                             .fill(.white)
                     }
                     .padding(10)
-                    .onTapGesture {
+                    .onTapGesture(count: 2) {
                         cloth.isLiked.toggle()
                         if cloth.isLiked == true {
                             cloth.likes += 1
@@ -40,6 +40,10 @@ struct ClothView: View {
                             cloth.likes -= 1
                         }
                     }
+                    .accessibilityElement()
+                    .accessibilityLabel(cloth.isLiked ? "Vêtement aimé" : "Vêtement non aimé")
+                    .accessibilityHint("Double-tape pour \(cloth.isLiked ? "retirer le like" : "ajouter un like")")
+
                 }
             } placeholder: {
                 ProgressView()

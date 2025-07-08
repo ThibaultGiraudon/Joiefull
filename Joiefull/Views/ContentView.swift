@@ -23,11 +23,6 @@ struct ContentView: View {
                     .frame(height: 40)
                 }
             }
-            .onAppear {
-                Task {
-                    await viewModel.fetchClothes()
-                }
-            }
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                     case .detailView:

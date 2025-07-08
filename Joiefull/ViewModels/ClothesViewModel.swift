@@ -25,6 +25,12 @@ class ClothesViewModel: ObservableObject {
 
     }
     
+    init() {
+        Task {
+            await self.fetchClothes()
+        }
+    }
+    
     @MainActor
     func fetchClothes() async {
         do {

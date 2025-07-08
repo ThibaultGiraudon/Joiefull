@@ -36,6 +36,9 @@ struct CategoryView: View {
                                 }
                                 viewModel.selectedClothID = $viewModel.clothes[index].id
                             }
+                            .accessibilityElement()
+                            .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
+                            .accessibilityHint("Tape pour ouvir la fiche produit")
                     }
                 }
             }
