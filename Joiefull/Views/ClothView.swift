@@ -20,6 +20,7 @@ struct ClothView: View {
                         .frame(width: size.width, height: size.height)
                         .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .accessibilityElement()
                         .accessibilityLabel(cloth.picture.description)
                     
                     HStack {
@@ -34,22 +35,23 @@ struct ClothView: View {
                     .padding(10)
                     .onTapGesture(count: 2) {
                         cloth.isLiked.toggle()
-                        if cloth.isLiked == true {
-                            cloth.likes += 1
-                        } else {
-                            cloth.likes -= 1
-                        }
+                        cloth.likes += cloth.isLiked ? 1 : -1
                     }
                     .accessibilityElement()
                     .accessibilityLabel(cloth.isLiked ? "Vêtement aimé" : "Vêtement non aimé")
+                    .accessibilityValue("\(cloth.likes) likes")
                     .accessibilityHint("Double-tape pour \(cloth.isLiked ? "retirer le like" : "ajouter un like")")
+                    .accessibilityAction {
+                        cloth.isLiked.toggle()
+                        cloth.likes += cloth.isLiked ? 1 : -1
+                    }
 
                 }
             } placeholder: {
                 ProgressView()
                     .accessibilityLabel("Chargement de l'image")
             }
-            ClothInfoView(cloth: cloth)
+            ClothInfoView(cloth: $cloth)
         }
         .frame(width: size.width)
     }

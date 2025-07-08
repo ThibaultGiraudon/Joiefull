@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ClothInfoView: View {
-    var cloth: Cloth
+    @Binding var cloth: Cloth
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -18,7 +18,7 @@ struct ClothInfoView: View {
                 Spacer()
                 Image(systemName: "star.fill")
                     .foregroundStyle(.orange)
-                Text("4.4") // TODO add rate in model
+                Text("\(cloth.rating, specifier: "%.1f")")
             }
             HStack {
                 if cloth.originalPrice != cloth.price {
@@ -41,17 +41,17 @@ struct ClothInfoView: View {
         components.append(cloth.name)
         
         if cloth.originalPrice != cloth.price {
-            components.append("\(cloth.name), en promotion, \(cloth.price.formatted(.currency(code: "EUR"))) au lieu de \(cloth.originalPrice.formatted(.currency(code: "EUR")))")
+            components.append("en promotion, \(cloth.price.formatted(.currency(code: "EUR"))) au lieu de \(cloth.originalPrice.formatted(.currency(code: "EUR")))")
         } else {
-            components.append("\(cloth.name), \(cloth.price.formatted(.currency(code: "EUR")))")
+            components.append("\(cloth.price.formatted(.currency(code: "EUR")))")
         }
         
-        components.append("noté \(4.4) étoiles")
-        
+        components.append("noté \(cloth.rating) étoiles")
         return components.joined(separator: ",")
     }
 }
 
 #Preview {
-    ClothInfoView(cloth: DefaultData().cloth)
+    @Previewable @State var cloth = DefaultData().cloth
+    ClothInfoView(cloth: $cloth)
 }

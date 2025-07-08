@@ -19,8 +19,12 @@ struct ContentView: View {
                     Group {
                         Color.red
                         Text(viewModel.errorMessage)
+                            .accessibilityLabel("Erreur : \(viewModel.errorMessage)")
+                            .accessibilityAddTraits(.isStaticText)
                     }
                     .frame(height: 40)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
                 }
             }
             .navigationDestination(for: AppRoute.self) { route in
@@ -28,6 +32,7 @@ struct ContentView: View {
                     case .detailView:
                         if let cloth = viewModel.selectedCloth {
                             ClothDetailsView(cloth: cloth)
+                                .accessibilityAddTraits(.isModal)
                         }
                     default:
                         EmptyView()

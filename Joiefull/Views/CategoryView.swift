@@ -38,7 +38,7 @@ struct CategoryView: View {
                             }
                             .accessibilityElement()
                             .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
-                            .accessibilityHint("Tape pour ouvir la fiche produit")
+                            .accessibilityHint("Double-tape pour ouvir la fiche produit")
                     }
                 }
             }

@@ -30,10 +30,17 @@ struct Cloth: Identifiable, Codable, Hashable {
     var price: Double
     var originalPrice: Double
     var isLiked: Bool = false
+    var rating: Double = 4.0
+    var reviews: [Review] = []
     
     struct Picture: Codable, Hashable {
         var url: URL
         var description: String
+    }
+    
+    struct Review: Codable, Hashable {
+        var rating: Double
+        var review: String
     }
     
     enum CodingKeys: String, CodingKey {
