@@ -13,6 +13,17 @@ class ClothesViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
     @Published var selectedClothID: Int?
+    @Published var searchText = ""
+    var filteredClothes: [Cloth] {
+        get {
+            return self.clothes.filter {
+                searchText.isEmpty || $0.name.contains(searchText)
+            }
+        }
+        set {
+            
+        }
+    }
     
     var selectedCloth: Binding<Cloth>? {
         guard let id = self.selectedClothID, let index = self.clothes.firstIndex(where: { $0.id == id }) else {
@@ -69,6 +80,6 @@ class ClothesViewModel: ObservableObject {
     }
     
     func indices(for category: Cloth.Category) -> [Int] {
-        clothes.indices.filter { clothes[$0].categoryItem == category }
+        filteredClothes.indices.filter { filteredClothes[$0].categoryItem == category }
     }
 }

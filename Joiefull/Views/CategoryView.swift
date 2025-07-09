@@ -15,6 +15,7 @@ struct CategoryView: View {
     @EnvironmentObject var coordinator: AppCoordinator
     @EnvironmentObject var viewModel: ClothesViewModel
 
+    @State private var showDestination = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,21 +27,20 @@ struct CategoryView: View {
                     ForEach(viewModel.indices(for: filter), id: \.self) { index in
                         Group {
                             if horizontalSizeClass == .compact {
-                                NavigationLink {
-                                    ClothDetailsView(cloth: $viewModel.clothes[index])
-                                } label: {
-                                    ClothView(cloth: $viewModel.clothes[index])
-                                        .foregroundStyle(.black)
-                                }
+                                    ClothView(cloth: $viewModel.filteredClothes[index])
+                                    .onTapGesture {
+                                        viewModel.selectedClothID = $viewModel.filteredClothes[index].id
+                                        showDestination.toggle()
+                                    }
 
                             } else {
-                                ClothView(cloth: $viewModel.clothes[index])
+                                ClothView(cloth: $viewModel.filteredClothes[index])
                                     .onTapGesture {
                                         
                                         viewModel.selectedClothID =
-                                        viewModel.selectedClothID == $viewModel.clothes[index].id
+                                        viewModel.selectedClothID == $viewModel.filteredClothes[index].id
                                         ? nil
-                                        : $viewModel.clothes[index].id
+                                        : $viewModel.filteredClothes[index].id
                                     }
                             }
                         }
@@ -48,6 +48,11 @@ struct CategoryView: View {
                             .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
                             .accessibilityHint("Double-tape pour ouvir la fiche produit")
                     }
+                }
+            }
+            .navigationDestination(isPresented: $showDestination) {
+                if let cloth = viewModel.selectedCloth {
+                    ClothDetailsView(cloth: cloth)
                 }
             }
         }

@@ -17,47 +17,75 @@ struct ClosetView: View {
     private let minWidth = UIScreen.main.bounds.width * 0.4
     private let maxWidth = UIScreen.main.bounds.width * 0.8
     var body: some View {
-        HStack {
-            ScrollView(showsIndicators: false) {
-                CategoryView(title: "Hauts", filter: .top)
-                    .accessibilityLabel("Catégorie : Hauts")
-                CategoryView(title: "Bas", filter: .bottoms)
-                    .accessibilityLabel("Catégorie : Bas")
-                CategoryView(title: "Sacs", filter: .accessories)
-                    .accessibilityLabel("Catégorie : Sacs")
-                CategoryView(title: "Chaussure", filter: .shoes)
-                    .accessibilityLabel("Catégorie : Chaussures")
-            }
-            .accessibilityLabel("Liste des catégories de vêtements. Tirez vers le bas pour rafraîchir.")
-            .refreshable {
-                Task {
-                    await viewModel.fetchClothes() 
+        VStack {
+            HStack {
+                VStack {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                        TextField("Rechercher", text: $viewModel.searchText)
+                            .foregroundStyle(.black)
+                        Spacer()
+                        if !viewModel.searchText.isEmpty {
+                            Image(systemName: "xmark.circle")
+                                .onTapGesture {
+                                    viewModel.searchText = ""
+                                }
+                        }
+                    }
+                    .foregroundStyle(.gray)
+                    .padding(5)
+                    .background {
+                        Capsule()
+                            .fill(.gray.opacity(0.2))
+                    }
+                    .padding()
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Bar de recherche pour filter les vêtement")
+                    ScrollView(showsIndicators: false) {
+                        CategoryView(title: "Hauts", filter: .top)
+                            .accessibilityLabel("Catégorie : Hauts")
+                        CategoryView(title: "Bas", filter: .bottoms)
+                            .accessibilityLabel("Catégorie : Bas")
+                        CategoryView(title: "Sacs", filter: .accessories)
+                            .accessibilityLabel("Catégorie : Sacs")
+                        CategoryView(title: "Chaussure", filter: .shoes)
+                            .accessibilityLabel("Catégorie : Chaussures")
+                    }
+                    .accessibilityLabel("Liste des catégories de vêtements. Tirez vers le bas pour rafraîchir.")
+                    .refreshable {
+                        Task {
+                            await viewModel.fetchClothes()
+                        }
+                    }
                 }
-            }
-            if let cloth = viewModel.selectedCloth, horizontalSizeClass == .regular {
-                ZStack {
-                    Rectangle()
-                        .ignoresSafeArea()
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(.gray)
-                        .frame(width: 6, height: 50)
-                }
-                .frame(width: 15)
+                if let cloth = viewModel.selectedCloth, horizontalSizeClass == .regular {
+                    ZStack {
+                        Rectangle()
+                            .ignoresSafeArea()
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(.gray)
+                            .frame(width: 6, height: 50)
+                    }
+                    .frame(width: 15)
                     .gesture(
                         DragGesture()
                             .onChanged({ value in
                                 let newWidth = detailViewWidth - value.translation.width
                                 detailViewWidth = min(max(newWidth, minWidth), maxWidth)
+                                if newWidth < 50 {
+                                    viewModel.selectedClothID = nil
+                                }
                             })
                     )
-                ClothDetailsView(cloth: cloth)
-                    .frame(width: detailViewWidth)
-                    .accessibilityElement(children: .contain)
-                    .accessibilityLabel("Détails du vêtement sélectionné : \(cloth.wrappedValue.name)")
-                    .accessibilityFocused($isFocused)
-                    .onAppear {
-                        isFocused = true
-                    }
+                    ClothDetailsView(cloth: cloth)
+                        .frame(width: detailViewWidth)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityLabel("Détails du vêtement sélectionné : \(cloth.wrappedValue.name)")
+                        .accessibilityFocused($isFocused)
+                        .onAppear {
+                            isFocused = true
+                        }
+                }
             }
         }
     }
