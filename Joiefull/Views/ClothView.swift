@@ -23,6 +23,8 @@ struct ClothView: View {
                         .frame(width: width, height: height)
                         .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .accessibilityElement()
+                        .accessibilityLabel(cloth.picture.description)
                     
                     HStack {
                         Image(systemName: cloth.isLiked ? "heart.fill" : "heart")
@@ -38,6 +40,7 @@ struct ClothView: View {
                         cloth.isLiked.toggle()
                         cloth.likes += cloth.isLiked ? 1 : -1
                     }
+                    .accessibilityHidden(true)
 
                 }
             } placeholder: {

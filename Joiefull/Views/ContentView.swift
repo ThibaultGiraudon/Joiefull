@@ -32,7 +32,6 @@ struct ContentView: View {
                     case .detailView:
                         if let cloth = viewModel.selectedCloth {
                             ClothDetailsView(cloth: cloth)
-                                .accessibilityAddTraits(.isModal)
                         }
                     default:
                         EmptyView()

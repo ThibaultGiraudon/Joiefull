@@ -34,7 +34,7 @@ enum APIError: Error, LocalizedError {
     }
 }
 
-class API: ObservableObject {
+class API {
     let url = URL(string: "https://raw.githubusercontent.com/OpenClassrooms-Student-Center/Cr-ez-une-interface-dynamique-et-accessible-avec-SwiftUI/main/api/clothes.json")!
     
     var session: URLSessionInterface

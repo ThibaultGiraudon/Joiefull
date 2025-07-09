@@ -24,6 +24,7 @@ struct ClothInfoView: View {
                     Text("\(cloth.rating, specifier: "%.1f")")
                 }
                 .lineLimit(1)
+                .accessibilityHidden(true)
                 HStack {
                     if cloth.originalPrice != cloth.price {
                         Text("\(cloth.price, format: .currency(code: "EUR"))")
@@ -35,16 +36,20 @@ struct ClothInfoView: View {
                     }
                 }
                 .lineLimit(1)
+                .accessibilityHidden(true)
             } else {
-                    Text(cloth.name)
-                        .lineLimit(2)
-                        .bold()
+                Text(cloth.name)
+                    .lineLimit(2)
+                    .bold()
+                    .accessibilityHidden(true)
                 HStack {
                     Image(systemName: "star.fill")
                         .foregroundStyle(.orange)
                     Text("\(cloth.rating, specifier: "%.1f")")
                 }
-                    Text("\(cloth.price, format: .currency(code: "EUR"))")
+                .accessibilityHidden(true)
+                Text("\(cloth.price, format: .currency(code: "EUR"))")
+                    .accessibilityHidden(true)
             }
         }
         .accessibilityElement(children: .combine)
