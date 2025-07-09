@@ -34,27 +34,37 @@ class ClothesViewModel: ObservableObject {
         }
     }
     
-    
     @MainActor
     func fetchClothes() async {
+        errorMessage = ""
+        showError = false
+
         do {
-            errorMessage = ""
-            showError = false
             clothes = try await API(session: session).call()
-        } catch {
-            if let urlError = error as? URLError {
-                switch urlError.code {
-                    case .timedOut, .notConnectedToInternet, .networkConnectionLost:
-                        errorMessage = "Connexion impossible..."
-                        showError = true
+        } catch let apiError as APIError {
+            switch apiError {
+            case .invalidResponse:
+                errorMessage = "Réponse du serveur invalide."
+            case .invalidStatusCode(let code):
+                errorMessage = "Erreur serveur (code \(code))."
+            case .decodingError:
+                errorMessage = "Erreur de format des données."
+            case .networkError(let underlyingError):
+                if let urlError = underlyingError as? URLError {
+                    switch urlError.code {
+                    case .notConnectedToInternet, .timedOut, .networkConnectionLost:
+                        errorMessage = "Problème de connexion internet."
                     default:
-                        errorMessage = "Une erreur est survenu"
-                        showError = true
+                        errorMessage = "Erreur réseau : \(urlError.localizedDescription)"
+                    }
+                } else {
+                    errorMessage = "Erreur réseau inattendue."
                 }
-            } else {
-                errorMessage = "Une erreur est survenu"
-                showError = true
             }
+            showError = true
+        } catch {
+            errorMessage = "Une erreur inconnue est survenue."
+            showError = true
         }
     }
     
