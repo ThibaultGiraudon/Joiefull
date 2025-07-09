@@ -17,7 +17,7 @@ class ClothesViewModel: ObservableObject {
     var filteredClothes: [Cloth] {
         get {
             return self.clothes.filter {
-                searchText.isEmpty || $0.name.contains(searchText)
+                searchText.isEmpty || $0.name.capitalized.contains(searchText.capitalized)
             }
         }
         set {
