@@ -9,7 +9,10 @@ import SwiftUI
 
 struct ClothView: View {
     @Binding var cloth: Cloth
-    var size: CGSize
+    
+    @ScaledMetric var height: CGFloat = 200
+    @ScaledMetric var width: CGFloat = 200
+    
     var body: some View {
         VStack(alignment: .leading) {
             AsyncImage(url: cloth.picture.url) { image in
@@ -17,7 +20,7 @@ struct ClothView: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: size.width, height: size.height)
+                        .frame(width: width, height: height)
                         .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                     
@@ -43,12 +46,12 @@ struct ClothView: View {
             }
             ClothInfoView(cloth: $cloth)
         }
-        .frame(width: size.width)
+        .frame(width: width)
     }
 }
 
 #Preview {
     @Previewable @State var cloth = DefaultData().cloth
-    ClothView(cloth: $cloth, size: CGSize(width: 200, height: 200))
+    ClothView(cloth: $cloth)
         .frame(width: 200)
 }

@@ -15,11 +15,6 @@ struct CategoryView: View {
     @EnvironmentObject var coordinator: AppCoordinator
     @EnvironmentObject var viewModel: ClothesViewModel
 
-    var size: CGSize {
-        horizontalSizeClass == .compact
-        ? CGSize(width: 200, height: 200)
-        : CGSize(width: 221, height: 254)
-    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,12 +29,12 @@ struct CategoryView: View {
                                 NavigationLink {
                                     ClothDetailsView(cloth: $viewModel.clothes[index])
                                 } label: {
-                                    ClothView(cloth: $viewModel.clothes[index], size: size)
+                                    ClothView(cloth: $viewModel.clothes[index])
                                         .foregroundStyle(.black)
                                 }
 
                             } else {
-                                ClothView(cloth: $viewModel.clothes[index], size: size)
+                                ClothView(cloth: $viewModel.clothes[index])
                                     .onTapGesture {
                                         viewModel.selectedClothID = $viewModel.clothes[index].id
                                     }

@@ -11,6 +11,11 @@ struct ClosetView: View {
     @EnvironmentObject var viewModel: ClothesViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @AccessibilityFocusState private var isFocused: Bool
+    
+    @State private var detailViewWidth: CGFloat = UIScreen.main.bounds.width * 0.5
+    
+    private let minWidth = UIScreen.main.bounds.width * 0.4
+    private let maxWidth = UIScreen.main.bounds.width * 0.8
     var body: some View {
         HStack {
             ScrollView(showsIndicators: false) {
@@ -30,8 +35,23 @@ struct ClosetView: View {
                 }
             }
             if let cloth = viewModel.selectedCloth, horizontalSizeClass == .regular {
+                ZStack {
+                    Rectangle()
+                        .ignoresSafeArea()
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(.gray)
+                        .frame(width: 6, height: 50)
+                }
+                .frame(width: 15)
+                    .gesture(
+                        DragGesture()
+                            .onChanged({ value in
+                                let newWidth = detailViewWidth - value.translation.width
+                                detailViewWidth = min(max(newWidth, minWidth), maxWidth)
+                            })
+                    )
                 ClothDetailsView(cloth: cloth)
-                    .frame(width: UIScreen.main.bounds.width * 0.4)
+                    .frame(width: detailViewWidth)
                     .accessibilityElement(children: .contain)
                     .accessibilityLabel("Détails du vêtement sélectionné : \(cloth.wrappedValue.name)")
                     .accessibilityFocused($isFocused)

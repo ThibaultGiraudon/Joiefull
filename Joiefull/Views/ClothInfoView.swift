@@ -9,26 +9,42 @@ import SwiftUI
 
 struct ClothInfoView: View {
     @Binding var cloth: Cloth
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text(cloth.name)
-                    .lineLimit(1)
-                    .bold()
-                Spacer()
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.orange)
-                Text("\(cloth.rating, specifier: "%.1f")")
-            }
-            HStack {
-                if cloth.originalPrice != cloth.price {
-                    Text("\(cloth.price, format: .currency(code: "EUR"))")
+            if dynamicTypeSize < .xLarge {
+                HStack {
+                    Text(cloth.name)
+                        .lineLimit(1)
+                        .bold()
                     Spacer()
-                    Text("\(cloth.originalPrice, format: .currency(code: "EUR"))")
-                        .strikethrough()
-                } else {
-                    Text("\(cloth.price, format: .currency(code: "EUR"))")
+                    Image(systemName: "star.fill")
+                        .foregroundStyle(.orange)
+                    Text("\(cloth.rating, specifier: "%.1f")")
                 }
+                .lineLimit(1)
+                HStack {
+                    if cloth.originalPrice != cloth.price {
+                        Text("\(cloth.price, format: .currency(code: "EUR"))")
+                        Spacer()
+                        Text("\(cloth.originalPrice, format: .currency(code: "EUR"))")
+                            .strikethrough()
+                    } else {
+                        Text("\(cloth.price, format: .currency(code: "EUR"))")
+                    }
+                }
+                .lineLimit(1)
+            } else {
+                    Text(cloth.name)
+                        .lineLimit(2)
+                        .bold()
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundStyle(.orange)
+                    Text("\(cloth.rating, specifier: "%.1f")")
+                }
+                    Text("\(cloth.price, format: .currency(code: "EUR"))")
             }
         }
         .accessibilityElement(children: .combine)

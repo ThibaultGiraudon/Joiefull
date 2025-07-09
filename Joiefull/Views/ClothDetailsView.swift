@@ -11,13 +11,33 @@ struct ClothDetailsView: View {
     @Binding var cloth: Cloth
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
-    var height: CGFloat {
-        if horizontalSizeClass == .compact {
-            return 431
+    
+    var body: some View {
+        Group {
+            if dynamicTypeSize > .xLarge {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    DetailsView(cloth: $cloth)
+                }
+            } else {                
+                DetailsView(cloth: $cloth)
+            }
         }
-        return 405
+        .padding()
+        .onAppear {
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: "Détail du vêtement affiché"
+            )
+        }
     }
+}
+
+struct DetailsView: View {
+    @Binding var cloth: Cloth
+    
+    @ScaledMetric var height: CGFloat = 405
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -109,13 +129,6 @@ struct ClothDetailsView: View {
                     .padding(.vertical)
                 }
             }
-        }
-        .padding()
-        .onAppear {
-            UIAccessibility.post(
-                notification: .announcement,
-                argument: "Détail du vêtement affiché"
-            )
         }
     }
 }
