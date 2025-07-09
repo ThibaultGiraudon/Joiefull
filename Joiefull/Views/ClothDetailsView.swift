@@ -27,7 +27,7 @@ struct ClothDetailsView: View {
                         ZStack(alignment: .bottomTrailing) {
                             image
                                 .resizable()
-                                .aspectRatio(contentMode: .fill)
+                                .scaledToFill()
                                 .frame(height: height)
                                 .clipped()
                                 .clipShape(RoundedRectangle(cornerRadius: 20))

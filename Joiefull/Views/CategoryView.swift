@@ -29,13 +29,22 @@ struct CategoryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(viewModel.indices(for: filter), id: \.self) { index in
-                        ClothView(cloth: $viewModel.clothes[index], size: size)
-                            .onTapGesture {
-                                if horizontalSizeClass == .compact {
-                                    coordinator.goToDetail()
+                        Group {
+                            if horizontalSizeClass == .compact {
+                                NavigationLink {
+                                    ClothDetailsView(cloth: $viewModel.clothes[index])
+                                } label: {
+                                    ClothView(cloth: $viewModel.clothes[index], size: size)
+                                        .foregroundStyle(.black)
                                 }
-                                viewModel.selectedClothID = $viewModel.clothes[index].id
+
+                            } else {
+                                ClothView(cloth: $viewModel.clothes[index], size: size)
+                                    .onTapGesture {
+                                        viewModel.selectedClothID = $viewModel.clothes[index].id
+                                    }
                             }
+                        }
                             .accessibilityElement(children: .contain)
                             .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
                             .accessibilityHint("Double-tape pour ouvir la fiche produit")
@@ -53,12 +62,14 @@ struct CategoryView: View {
     @Previewable @StateObject var coordinator = AppCoordinator()
     @Previewable @State var clothes = DefaultData().clothes
     
-    CategoryView(title: "Hauts", filter: .top)
-        .environmentObject(coordinator)
-        .environmentObject(viewModel)
-        .onAppear {
-            Task {
-                await viewModel.fetchClothes()
+    NavigationStack {
+        CategoryView(title: "Hauts", filter: .top)
+            .environmentObject(coordinator)
+            .environmentObject(viewModel)
+            .onAppear {
+                Task {
+                    await viewModel.fetchClothes()
+                }
             }
-        }
+    }
 }
