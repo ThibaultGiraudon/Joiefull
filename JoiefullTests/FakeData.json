@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "picture": {
+      "url": "https://exemple.com/1.jpg",
+      "description": "description 1"
+    },
+    "name": "name 1",
+    "category": "ACCESSORIES",
+    "likes": 11,
+    "price": 11.11,
+    "original_price": 11.11
+  },
+  {
+    "id": 2,
+    "picture": {
+      "url": "https://exemple.com/2.jpg",
+      "description": "description 2"
+    },
+    "name": "name 2",
+    "category": "SHOES",
+    "likes": 22,
+    "price": 22.22,
+    "original_price": 22.22
+  },
+  {
+    "id": 3,
+    "picture": {
+      "url": "https://exemple.com/3.jpg",
+      "description": "description 3"
+    },
+    "name": "name 3",
+    "category": "TOPS",
+    "likes": 33,
+    "price": 33.33,
+    "original_price": 33.33
+  },
+  {
+    "id": 4,
+    "picture": {
+      "url": "https://exemple.com/4.jpg",
+      "description": "description 4"
+    },
+    "name": "name 4",
+    "category": "BOTTOMS",
+    "likes": 44,
+    "price": 44.44,
+    "original_price": 44.44
+  },
+  {
+    "id": 5,
+    "picture": {
+      "url": "https://exemple.com/5.jpg",
+      "description": "description 5"
+    },
+    "name": "name 5",
+    "category": "CATEGORY",
+    "likes": 55,
+    "price": 55.55,
+    "original_price": 55.55
+  },
+]

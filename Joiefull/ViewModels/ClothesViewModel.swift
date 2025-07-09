@@ -25,18 +25,22 @@ class ClothesViewModel: ObservableObject {
 
     }
     
-    init() {
+    var session: URLSessionInterface
+    
+    init(session: URLSessionInterface = URLSession.shared) {
+        self.session = session
         Task {
             await self.fetchClothes()
         }
     }
+    
     
     @MainActor
     func fetchClothes() async {
         do {
             errorMessage = ""
             showError = false
-            clothes = try await API().call()
+            clothes = try await API(session: session).call()
         } catch {
             if let urlError = error as? URLError {
                 switch urlError.code {

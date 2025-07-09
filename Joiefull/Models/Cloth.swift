@@ -23,7 +23,7 @@ struct Cloth: Identifiable, Codable, Hashable {
             case "TOPS":
                 return .top
             default:
-                return .top
+                return .none
         }
     }
     var likes: Int
@@ -49,6 +49,6 @@ struct Cloth: Identifiable, Codable, Hashable {
     }
     
     enum Category: String {
-        case top, shoes, bottoms, accessories
+        case top, shoes, bottoms, accessories, none
     }
 }

@@ -9,28 +9,110 @@ import XCTest
 @testable import Joiefull
 
 final class JoiefullTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testVMfetchClothesShouldSucceed() async {
+        let sessionFake = URLSessionFake()
+        guard let data = FakeData().correctData else {
+            XCTFail()
+            return
         }
+        sessionFake.data = data
+        sessionFake.response = FakeData().correctResponse
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        XCTAssertEqual(vm.clothes, FakeData().clothes)
     }
-
+    
+    func testVMfetchClothesShouldFailedWithBadURL() async {
+        let sessionFake = URLSessionFake()
+        sessionFake.response = FakeData().badResponse
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        XCTAssertEqual(vm.showError, true)
+        XCTAssertEqual(vm.errorMessage, "Une erreur est survenu")
+    }
+    
+    
+    func testVMfetchClothesShouldFailedWithBadServerRepsonse() async {
+        let sessionFake = URLSessionFake()
+        sessionFake.response = FakeData().badResponse2
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        XCTAssertEqual(vm.showError, true)
+        XCTAssertEqual(vm.errorMessage, "Une erreur est survenu")
+    }
+    
+    func testVMfetchClothesShouldFailedWithURLErrorTimeOut() async {
+        let sessionFake = URLSessionFake()
+        sessionFake.error = URLError(.timedOut)
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        XCTAssertEqual(vm.showError, true)
+        XCTAssertEqual(vm.errorMessage, "Connexion impossible...")
+    }
+    
+    
+    func testVMfetchClothesShouldFailedWithMachErrorAborted() async {
+        let sessionFake = URLSessionFake()
+        sessionFake.error = MachError(.aborted)
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        XCTAssertEqual(vm.showError, true)
+        XCTAssertEqual(vm.errorMessage, "Une erreur est survenu")
+    }
+    
+    func testVMSelectedCloth() async {
+        let sessionFake = URLSessionFake()
+        guard let data = FakeData().correctData else {
+            XCTFail()
+            return
+        }
+        sessionFake.data = data
+        sessionFake.response = FakeData().correctResponse
+        
+        let vm = ClothesViewModel(session: sessionFake)
+        
+        await vm.fetchClothes()
+        
+        vm.selectedClothID = 1
+        guard let cloth = vm.selectedCloth else {
+            XCTFail()
+            return
+        }
+        
+        cloth.wrappedValue.name = "new name"
+        
+        XCTAssertEqual(vm.clothes[0].name, "new name")
+        XCTAssertEqual(vm.clothes[0].categoryItem, .accessories)
+        XCTAssertEqual(vm.clothes[1].categoryItem, .shoes)
+        XCTAssertEqual(vm.clothes[2].categoryItem, .top)
+        XCTAssertEqual(vm.clothes[3].categoryItem, .bottoms)
+        XCTAssertEqual(vm.clothes[4].categoryItem, .none)
+    }
+    
+    func testAppCoordinator() {
+        let coordinator = AppCoordinator()
+        
+        coordinator.goToDetail()
+        
+        XCTAssert(coordinator.path == [.detailView])
+        
+        coordinator.resetNavigation()
+        
+        XCTAssert(coordinator.path.isEmpty)
+    }
 }

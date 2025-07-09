@@ -53,11 +53,6 @@
 			path = JoiefullTests;
 			sourceTree = "<group>";
 		};
-		CE7641702E1BC3E6005C1233 /* JoiefullUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = JoiefullUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +85,6 @@
 			children = (
 				CE7641582E1BC3E5005C1233 /* Joiefull */,
 				CE7641662E1BC3E6005C1233 /* JoiefullTests */,
-				CE7641702E1BC3E6005C1233 /* JoiefullUITests */,
 				CE7641572E1BC3E5005C1233 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,9 +159,6 @@
 			);
 			dependencies = (
 				CE76416F2E1BC3E6005C1233 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				CE7641702E1BC3E6005C1233 /* JoiefullUITests */,
 			);
 			name = JoiefullUITests;
 			packageProductDependencies = (
