@@ -36,7 +36,11 @@ struct CategoryView: View {
                             } else {
                                 ClothView(cloth: $viewModel.clothes[index])
                                     .onTapGesture {
-                                        viewModel.selectedClothID = $viewModel.clothes[index].id
+                                        
+                                        viewModel.selectedClothID =
+                                        viewModel.selectedClothID == $viewModel.clothes[index].id
+                                        ? nil
+                                        : $viewModel.clothes[index].id
                                     }
                             }
                         }
