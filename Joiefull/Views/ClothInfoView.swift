@@ -40,6 +40,10 @@ struct ClothInfoView: View {
         
         components.append(cloth.name)
         
+        components.append("\(cloth.isLiked ? "vêtement aimé" : "")")
+        
+        components.append("\(cloth.likes) like")
+        
         if cloth.originalPrice != cloth.price {
             components.append("en promotion, \(cloth.price.formatted(.currency(code: "EUR"))) au lieu de \(cloth.originalPrice.formatted(.currency(code: "EUR")))")
         } else {

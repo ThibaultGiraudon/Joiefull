@@ -36,7 +36,7 @@ struct CategoryView: View {
                                 }
                                 viewModel.selectedClothID = $viewModel.clothes[index].id
                             }
-                            .accessibilityElement()
+                            .accessibilityElement(children: .contain)
                             .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
                             .accessibilityHint("Double-tape pour ouvir la fiche produit")
                     }
