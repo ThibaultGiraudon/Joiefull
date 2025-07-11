@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RatingView: View {
-    @Binding var cloth: Cloth
-    var save: (Double, String) -> ()
+    var cloth: Cloth
+    var save: (Double, String) -> Void
     
     @State private var rating = 0.0
     @State private var review = ""
@@ -70,8 +70,8 @@ struct RatingView: View {
 }
 
 #Preview {
-    @Previewable @State var cloth = DefaultData().cloth
-    RatingView(cloth: $cloth) { _, _ in
+    let cloth = DefaultData().cloth
+    RatingView(cloth: cloth) { _, _ in
         
     }
 }

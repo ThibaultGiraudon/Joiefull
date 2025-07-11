@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: ClothesViewModel
-    @EnvironmentObject var coordinator: AppCoordinator
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var body: some View {
-        NavigationStack(path: $coordinator.path) {
+        NavigationStack {
             ClosetView()
             .overlay(alignment: .bottom) {
                 if viewModel.showError {
@@ -27,16 +26,6 @@ struct ContentView: View {
                     .accessibilityAddTraits(.isHeader)
                 }
             }
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                    case .detailView:
-                        if let cloth = viewModel.selectedCloth {
-                            ClothDetailsView(cloth: cloth)
-                        }
-                    default:
-                        EmptyView()
-                }
-            }
         }
         .dynamicTypeSize(.xSmall ... .accessibility3)
     }
@@ -44,10 +33,7 @@ struct ContentView: View {
 
 #Preview() {
     @Previewable @StateObject var viewModel = ClothesViewModel()
-    @Previewable @StateObject var coordinator = AppCoordinator()
     
     ContentView()
-        .environmentObject(coordinator)
         .environmentObject(viewModel)
 }
-

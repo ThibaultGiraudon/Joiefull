@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct ClothInfoView: View {
-    @Binding var cloth: Cloth
+    var cloth: Cloth
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading) {
-            if dynamicTypeSize < .xLarge {
+            if dynamicTypeSize < .xxLarge {
                 HStack {
                     Text(cloth.name)
                         .lineLimit(1)
@@ -77,6 +77,6 @@ struct ClothInfoView: View {
 }
 
 #Preview {
-    @Previewable @State var cloth = DefaultData().cloth
-    ClothInfoView(cloth: $cloth)
+    let cloth = DefaultData().cloth
+    ClothInfoView(cloth: cloth)
 }

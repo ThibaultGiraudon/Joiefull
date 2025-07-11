@@ -14,16 +14,16 @@ struct Cloth: Identifiable, Codable, Hashable {
     var category: String
     var categoryItem: Category {
         switch self.category {
-            case "ACCESSORIES":
-                return .accessories
-            case "BOTTOMS":
-                return .bottoms
-            case "SHOES":
-                return .shoes
-            case "TOPS":
-                return .top
-            default:
-                return .none
+        case "ACCESSORIES":
+            return .accessories
+        case "BOTTOMS":
+            return .bottoms
+        case "SHOES":
+            return .shoes
+        case "TOPS":
+            return .top
+        default:
+            return .none
         }
     }
     var likes: Int

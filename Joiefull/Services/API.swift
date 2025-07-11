@@ -13,25 +13,11 @@ protocol URLSessionInterface {
 
 extension URLSession: URLSessionInterface { }
 
-
 enum APIError: Error, LocalizedError {
     case invalidResponse
     case invalidStatusCode(Int)
     case decodingError
     case networkError(Error)
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidResponse:
-            return "La réponse du serveur est invalide."
-        case .invalidStatusCode(let code):
-            return "Le serveur a retourné le code d'erreur \(code)."
-        case .decodingError:
-            return "Les données reçues sont corrompues ou dans un format inattendu."
-        case .networkError(let error):
-            return "Une erreur réseau est survenue : \(error.localizedDescription)"
-        }
-    }
 }
 
 class API {
@@ -52,6 +38,7 @@ class API {
             let (data, response) = try await session.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse else {
+                print("throw invalidResponse")
                 throw APIError.invalidResponse
             }
             
@@ -66,7 +53,11 @@ class API {
             }
             
         } catch {
-            throw APIError.networkError(error)
+            if let apiError = error as? APIError {
+                throw apiError
+            } else {
+                throw APIError.networkError(error)
+            }
         }
 
     }

@@ -16,6 +16,7 @@ struct ClosetView: View {
     
     private let minWidth = UIScreen.main.bounds.width * 0.4
     private let maxWidth = UIScreen.main.bounds.width * 0.8
+    
     var body: some View {
         VStack {
             HStack {
@@ -42,14 +43,9 @@ struct ClosetView: View {
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("Bar de recherche pour filter les vêtement")
                     ScrollView(showsIndicators: false) {
-                        CategoryView(title: "Hauts", filter: .top)
-                            .accessibilityLabel("Catégorie : Hauts")
-                        CategoryView(title: "Bas", filter: .bottoms)
-                            .accessibilityLabel("Catégorie : Bas")
-                        CategoryView(title: "Sacs", filter: .accessories)
-                            .accessibilityLabel("Catégorie : Sacs")
-                        CategoryView(title: "Chaussure", filter: .shoes)
-                            .accessibilityLabel("Catégorie : Chaussures")
+                        ForEach(viewModel.mappedClothes, id: \.0) { category, clothes in
+                            CategoryView(title: category, clothes: clothes)
+                        }
                     }
                     .accessibilityLabel("Liste des catégories de vêtements. Tirez vers le bas pour rafraîchir.")
                     .refreshable {
@@ -73,14 +69,15 @@ struct ClosetView: View {
                                 let newWidth = detailViewWidth - value.translation.width
                                 detailViewWidth = min(max(newWidth, minWidth), maxWidth)
                                 if newWidth < 50 {
-                                    viewModel.selectedClothID = nil
+                                    viewModel.selectedCloth = nil
                                 }
                             })
                     )
                     ClothDetailsView(cloth: cloth)
+                        .id(cloth.id)
                         .frame(width: detailViewWidth)
                         .accessibilityElement(children: .contain)
-                        .accessibilityLabel("Détails du vêtement sélectionné : \(cloth.wrappedValue.name)")
+                        .accessibilityLabel("Détails du vêtement sélectionné : \(cloth.name)")
                         .accessibilityFocused($isFocused)
                         .onAppear {
                             isFocused = true
@@ -93,9 +90,9 @@ struct ClosetView: View {
 
 #Preview {
     @Previewable @StateObject var viewModel = ClothesViewModel()
-    @Previewable @StateObject var coordinator = AppCoordinator()
     
-    ClosetView()
-        .environmentObject(coordinator)
-        .environmentObject(viewModel)
+    NavigationStack {
+        ClosetView()
+            .environmentObject(viewModel)
+    }
 }

@@ -19,8 +19,11 @@ struct FakeData {
         return try? Data(contentsOf: url)
     }
     
-    var clothes: [Cloth] {
-        try! JSONDecoder().decode([Cloth].self, from: self.correctData!)
+    var clothes: [Cloth]? {
+        guard let correctData = self.correctData else {
+            return nil
+        }
+        return try? JSONDecoder().decode([Cloth].self, from: correctData)
     }
     
     var correctResponse: URLResponse = HTTPURLResponse(url: URL(string: "https://openclassrooms.com/")!, statusCode: 200, httpVersion: nil, headerFields: nil)!

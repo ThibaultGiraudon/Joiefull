@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct ClothDetailsView: View {
-    @Binding var cloth: Cloth
+    var cloth: Cloth
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
-    
     var body: some View {
         Group {
-            if dynamicTypeSize > .xLarge {
+            if dynamicTypeSize > .large {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    DetailsView(cloth: $cloth)
+                    DetailsView(cloth: cloth)
                 }
             } else {                
-                DetailsView(cloth: $cloth)
+                DetailsView(cloth: cloth)
             }
         }
         .padding()
@@ -35,75 +34,25 @@ struct ClothDetailsView: View {
 }
 
 struct DetailsView: View {
-    @Binding var cloth: Cloth
+    @State var cloth: Cloth
     
+    @EnvironmentObject var viewModel: ClothesViewModel
     @ScaledMetric var height: CGFloat = 405
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
-                AsyncImage(url: cloth.picture.url) { image in
-                    ZStack(alignment: .topTrailing) {
-                        ZStack(alignment: .bottomTrailing) {
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: height)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                            
-                            HStack {
-                                Image(systemName: cloth.isLiked ? "heart.fill" : "heart")
-                                Text("\(cloth.likes)")
-                            }
-                            .padding(5)
-                            .background {
-                                Capsule()
-                                    .fill(.white)
-                            }
-                            .padding(10)
-                            .onTapGesture(count: 2) {
-                                cloth.isLiked.toggle()
-                                cloth.likes += cloth.isLiked ? 1 : -1
-                            }
-                            .accessibilityElement()
-                            .accessibilityHint("Double-tape pour \(cloth.isLiked ? "retirer le like" : "ajouter un like")")
-                            .accessibilityAction {
-                                cloth.isLiked.toggle()
-                                cloth.likes += cloth.isLiked ? 1 : -1
-                                
-                                UIAccessibility.post(
-                                    notification: .announcement,
-                                    argument: cloth.isLiked ? "Ajouté aux favoris" : "Retiré des favoris"
-                                )
-                            }
-                        }
-                        ShareLink(item: cloth.picture.url, subject: Text("Jette un oeil à cet atricle"), message: Text(cloth.name)) {
-                            Image("share")
-                        }
-                        .padding(10)
-                        .foregroundStyle(.black)
-                        .background {
-                            Circle()
-                                .fill(Material.ultraThin)
-                        }
-                        .padding(10)
-                        .accessibilityLabel("Partager le vêtement")
-                        .accessibilityHint("Double-tape pour ouvir les options de partage")
-                    }
-                } placeholder: {
-                    ProgressView()
-                        .accessibilityLabel("Chargement de l'image")
-                }
+                ClothImageView(cloth: $cloth)
                 .padding(.bottom)
                 
-                ClothInfoView(cloth: $cloth)
+                ClothInfoView(cloth: cloth)
                     .font(.title2)
                 
                 Text(cloth.picture.description)
                 
-                RatingView(cloth: $cloth) { rating, review in
+                RatingView(cloth: cloth) { rating, review in
                     cloth.reviews.append(Cloth.Review(rating: rating, review: review))
+                    viewModel.updateInfo(for: cloth)
                     UIAccessibility.post(
                         notification: .announcement,
                         argument: "Avis envoyé"
@@ -134,7 +83,7 @@ struct DetailsView: View {
 }
 
 #Preview {
-    @Previewable @State var cloth = DefaultData().cloth
-    ClothDetailsView(cloth: $cloth)
+    let cloth = DefaultData().cloth
+    ClothDetailsView(cloth: cloth)
         .frame(width: 400)
 }

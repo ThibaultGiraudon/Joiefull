@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CE6763542E212D9A006EDEC9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CE6763522E212D9A006EDEC9 /* .gitignore */; };
+		CE6763552E212D9A006EDEC9 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = CE6763532E212D9A006EDEC9 /* .swiftlint.yml */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CE7641642E1BC3E6005C1233 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE6763522E212D9A006EDEC9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		CE6763532E212D9A006EDEC9 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		CE7641562E1BC3E5005C1233 /* Joiefull.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joiefull.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE7641632E1BC3E6005C1233 /* JoiefullTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE76416D2E1BC3E6005C1233 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +90,8 @@
 		CE76414D2E1BC3E4005C1233 = {
 			isa = PBXGroup;
 			children = (
+				CE6763522E212D9A006EDEC9 /* .gitignore */,
+				CE6763532E212D9A006EDEC9 /* .swiftlint.yml */,
 				CE7641582E1BC3E5005C1233 /* Joiefull */,
 				CE7641662E1BC3E6005C1233 /* JoiefullTests */,
 				CE7641572E1BC3E5005C1233 /* Products */,
@@ -106,6 +115,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CE7641772E1BC3E6005C1233 /* Build configuration list for PBXNativeTarget "Joiefull" */;
 			buildPhases = (
+				CE6763562E212DBF006EDEC9 /* ShellScript */,
 				CE7641522E1BC3E4005C1233 /* Sources */,
 				CE7641532E1BC3E4005C1233 /* Frameworks */,
 				CE7641542E1BC3E4005C1233 /* Resources */,
@@ -216,6 +226,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE6763542E212D9A006EDEC9 /* .gitignore in Resources */,
+				CE6763552E212D9A006EDEC9 /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +246,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CE6763562E212DBF006EDEC9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CE7641522E1BC3E4005C1233 /* Sources */ = {
@@ -311,7 +345,7 @@
 				DEVELOPMENT_TEAM = T6PF4S9ABL;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -375,7 +409,7 @@
 				DEVELOPMENT_TEAM = T6PF4S9ABL;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

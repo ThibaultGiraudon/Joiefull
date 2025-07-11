@@ -9,13 +9,10 @@ import SwiftUI
 
 struct CategoryView: View {
     var title: String
-    var filter: Cloth.Category
+    var clothes: [Cloth]
 
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @EnvironmentObject var coordinator: AppCoordinator
     @EnvironmentObject var viewModel: ClothesViewModel
-
-    @State private var showDestination = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,35 +21,26 @@ struct CategoryView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(viewModel.indices(for: filter), id: \.self) { index in
+                    ForEach(clothes, id: \.self) { cloth in
                         Group {
                             if horizontalSizeClass == .compact {
-                                    ClothView(cloth: $viewModel.filteredClothes[index])
-                                    .onTapGesture {
-                                        viewModel.selectedClothID = $viewModel.filteredClothes[index].id
-                                        showDestination.toggle()
-                                    }
-
+                                NavigationLink {
+                                    ClothDetailsView(cloth: cloth)
+                                } label: {
+                                    ClothView(cloth: cloth)
+                                        .foregroundStyle(.black)
+                                }
                             } else {
-                                ClothView(cloth: $viewModel.filteredClothes[index])
+                                ClothView(cloth: cloth)
                                     .onTapGesture {
-                                        
-                                        viewModel.selectedClothID =
-                                        viewModel.selectedClothID == $viewModel.filteredClothes[index].id
-                                        ? nil
-                                        : $viewModel.filteredClothes[index].id
+                                        viewModel.selectedCloth = cloth
                                     }
                             }
                         }
                             .accessibilityElement(children: .contain)
-                            .accessibilityLabel("Voir les détails de \(viewModel.clothes[index].name)")
+                            .accessibilityLabel("Voir les détails de \(cloth.name)")
                             .accessibilityHint("Double-tape pour ouvir la fiche produit")
                     }
-                }
-            }
-            .navigationDestination(isPresented: $showDestination) {
-                if let cloth = viewModel.selectedCloth {
-                    ClothDetailsView(cloth: cloth)
                 }
             }
         }
@@ -60,15 +48,12 @@ struct CategoryView: View {
     }
 }
 
-
 #Preview {
     @Previewable @StateObject var viewModel = ClothesViewModel()
-    @Previewable @StateObject var coordinator = AppCoordinator()
-    @Previewable @State var clothes = DefaultData().clothes
+    let clothes = DefaultData().clothes
     
     NavigationStack {
-        CategoryView(title: "Hauts", filter: .top)
-            .environmentObject(coordinator)
+        CategoryView(title: "Hauts", clothes: clothes)
             .environmentObject(viewModel)
             .onAppear {
                 Task {
