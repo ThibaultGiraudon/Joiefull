@@ -22,6 +22,7 @@ struct ClothImageView: View {
                 .frame(height: height)
                 .clipped()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
+                .accessibilityHidden(true)
                 .overlay(alignment: .bottomTrailing) {
                     HStack {
                         Image(systemName: cloth.isLiked ? "heart.fill" : "heart")
