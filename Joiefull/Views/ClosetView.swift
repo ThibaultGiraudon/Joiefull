@@ -40,14 +40,13 @@ struct ClosetView: View {
                             .fill(.gray.opacity(0.2))
                     }
                     .padding()
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Bar de recherche pour filter les vêtement")
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Bar de recherche pour filtrer les vêtement")
                     ScrollView(showsIndicators: false) {
                         ForEach(viewModel.mappedClothes, id: \.0) { category, clothes in
                             CategoryView(title: category, clothes: clothes)
                         }
                     }
-                    .accessibilityLabel("Liste des catégories de vêtements. Tirez vers le bas pour rafraîchir.")
                     .refreshable {
                         Task {
                             await viewModel.fetchClothes()
